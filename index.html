@@ -7,12 +7,24 @@
 </head>
 <body>
     <h1>Registra Aí</h1>
-    <p>Site de finanças</p>
     <hr>
-    <input type="text" placeholder="Valor" id="amountInput">
-    <input type="text" placeholder="Descrição" id="descriptionInput">
-    <button onClick="register()">registrar</button>
+    <h5>Registrar ganhos:</h5>
+    <input type="text" placeholder="Valor" id="amountInputGain">
+    <input type="text" placeholder="Descrição" id="descriptionInputGain">
+    <button onClick="registerGain()">registrar</button>
 
+    <h5>Registrar gastos:</h5>
+    <input type="text" placeholder="Valor" id="amountInputExpense">
+    <input type="text" placeholder="Descrição" id="descriptionInputExpense">
+    <button onClick="registerExpense()">registrar</button>
+
+    <p id="balance">Saldo:</p>
+    <button onClick="loadBalance()">carregar Saldo</button>
+    <h4>Histórico:</h4>
+    <button onClick="loadHistory()">carregar Histórico</button>
+    <ul id="history">
+      </ul>
+      
     <script src="scripts/main.js"></script>
 </body>
 </html>
