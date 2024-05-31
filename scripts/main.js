@@ -1,119 +1,100 @@
-const url = 'http://localhost:8001'
-let $amountInputGain = document.getElementById("amountInputGain");
-let $descriptionInputGain = document.getElementById("descriptionInputGain");
-let $amountInputExpense = document.getElementById("amountInputExpense");
-let $descriptionInputExpense = document.getElementById("descriptionInputExpense");
-let $balance = document.getElementById("balance");
-const $ulElement = document.getElementById('history'); 
+const API_URL = "https://127.0.0.1:8001";
 
-function registerGain() {
-    let amount = $amountInputGain.value;
-    let description = $descriptionInputGain.value;
+let $main = document.getElementById("main");
 
-    let data = {
-        description: description,
-        amount: parseFloat(amount)
-    }
+init();
 
-    let fetchData = {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: new Headers({
-            'Content-Type': 'application/json; charset=UTF-8'
-        })
-    }
-
-    fetch(url + "/gain", fetchData)
-        .then(res => {
-            if (res.ok) return res.json();
-            else {
-                console.log("Erro ao registrar! Tente novamente");
-                console.log(res);
-            }
-        })
-        .then(data => {
-            console.log("Registrado com sucesso!");
-        });
+function init() {
+  if (isLogged()) {
+    loadLoggedView();
+  } else {
+    loadNotLoggedView();
+  }
 }
 
-function registerExpense() {
-    let amount = $amountInputExpense.value;
-    let description = $descriptionInputExpense.value;
-
-    let data = {
-        description: description,
-        amount: parseFloat(amount)
-    }
-
-    let fetchData = {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: new Headers({
-            'Content-Type': 'application/json; charset=UTF-8'
-        })
-    }
-
-    fetch(url + "/expense", fetchData)
-        .then(res => {
-            if (res.ok) return res.json();
-            else {
-                console.log("Erro ao registrar! Tente novamente");
-                console.log(res);
-            }
-        })
-        .then(data => {
-            console.log("Registrado com sucesso!");
-        });
+function login() {
+  window.location.href = `${API_URL}/login`;
 }
 
-function loadHistory() {
-    let fetchData = {
-        method: 'GET',
-        headers: new Headers({
-            'Content-Type': 'application/json; charset=UTF-8'
-        })
+function logout() {
+  fetch(API_URL + "/logout", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  })
+  .then(response => {
+    if (response.ok) {
+      window.location.href = "/";
+    } else {
+      console.error('Logout failed:', response.statusText);
     }
-
-    fetch(url + "/history", fetchData)
-        .then(res => {
-            if (res.ok) return res.json();
-            else {
-                console.log("Erro ao recuperar histórico");
-                console.log(res);
-            }
-        })
-        .then(data => {
-            console.log(data);
-
-            data.forEach(item => {
-                const $liElement = document.createElement('li');
-                const formattedItem = `${item.amount} - ${item.description} - ${item.ts}`; 
-                $liElement.textContent = formattedItem;
-                $ulElement.appendChild($liElement);
-            });
-        });
+  })
+  .catch(err => {
+    console.error('Fetch error:', err);
+  });
 }
 
+function loadNotLoggedView() {
+  let $template = document.getElementById("notLoggedView");
+  $main.innerHTML = $template.innerHTML;
 
-function loadBalance(params) {
-    let fetchData = {
-        method: 'GET',
-        headers: new Headers({
-            'Content-Type': 'application/json; charset=UTF-8'
-        })
+  let $loginButton = document.getElementById("loginButton");
+  $loginButton.addEventListener("click", login);
+}
+
+async function loadLoggedView() {
+  let $template = document.getElementById("loggedView");
+  $main.innerHTML = $template.innerHTML;
+
+  let $logoutButton = document.getElementById("logoutButton");
+  $logoutButton.addEventListener("click", logout);
+
+  let $userName = document.getElementById("userName");
+  let $userImage = document.getElementById("userImage");
+
+  let userData = await getUserData();
+
+  $userName.textContent = userData["username"];
+  $userImage.src = userData["profile_pic"];
+}
+
+async function getUserData() {
+  return fetch(API_URL + "/user_data", {
+    method: "GET",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(res => {
+      if (res.status === 401) {
+        throw new Error("User not logged");
+      }
+      return res.json();
+    })
+    .catch(err => {
+      if (err.message === "User not logged") {
+        $userData.textContent = "User not logged.";
+        $loginButton.style.display = "";
+        $logoutButton.style.display = "none";
+      } else {
+        console.error('Fetch error:', err);
+      }
+    });
+}
+
+function getCookie(name) {
+  let cookieArr = document.cookie.split(";");
+
+  for(let i = 0; i < cookieArr.length; i++) {
+    let cookiePair = cookieArr[i].split("=");
+
+    if(name == cookiePair[0].trim()) {
+      return decodeURIComponent(cookiePair[1]);
     }
+  }
+  return null;
+}
 
-    fetch(url + "/balance", fetchData)
-        .then(res => {
-            if (res.ok) return res.json();
-            else {
-                console.log("Erro ao recuperar saldo");
-                console.log(res);
-            }
-        })
-        .then(data => {
-            console.log(data);
-            $balance.textContent = "Saldo: " + data.balance;
-        });
-    
+function isLogged() {
+  let logged = getCookie("logged");
+  return logged === "true" ? true : false;
 }
