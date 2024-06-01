@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" class="theme-dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registra Aí</title>
-    <link rel="stylesheet" href="./styles.css">
-    <link rel="icon" href="images/favicon.svg" sizes="any" type="image/svg+xml">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registra Aí</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="images/favicon.svg" sizes="any" type="image/svg+xml">
 </head>
 <body class="has-navbar-fixed-top">
   <section class="section">
@@ -18,107 +18,9 @@
     </nav>
   </section>
 
-  <section id="main">
-  </section>
+  <section id="main"></section>
 
-  <template id="notLoggedView">
-    <section class="section">
-      <p class="subtitle h2">
-      Bem vinde ao Registra Aí!
-      </p>
-      <p>
-      Uma solução simples e prática para organizar e controlar seus ganhos e
-      gastos de dinheiro.
-      </p>
-      <p>
-      Por favor, entre na sua conta para continuar.
-      </p>
-      <div class="button is-light" id="loginButton">
-        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_48dp.png" alt="Google Logo" class="google-logo">
-        <a class="button is-light">
-          Entrar
-        </a>
-      </div>
-    </section>
-  </template>
-
-  <template id="loggedView">
-  <section class="section">
-    <div class="columns user-info">
-      <div class="column is-narrow">
-        <figure class="image is-128x128">
-          <img id="userImage" src="" alt="User Image">
-        </figure>
-      </div>
-      <div class="column">
-        <h1 class="title is-2" id="userName"></h1>
-      </div>
-      <div class="column is-narrow is-flex">
-        <button class="button is-light" id="logoutButton">
-          Sair
-        </button>
-      </div>
-    </div>
-  </section>
-
-    <section class="section is-fullheight is-fullheight-with-navbar">
-      <div class="columns">
-        <div class="column">
-          <h1 class="title is-4">Registrar ganhos</h1>
-          <input class="input" type="text" placeholder="Valor" id="amountInputGain">
-          <input class="input" type="text" placeholder="Descrição" id="descriptionInputGain">
-          <button class="button" onClick="registerGain()">Registrar</button>
-        </div>
-        <div class="column">
-          <h1 class="title is-4">Registrar gastos</h1>
-          <input class="input" type="text" placeholder="Valor" id="amountInputExpense">
-          <input class="input" type="text" placeholder="Descrição" id="descriptionInputExpense">
-          <button class="button" onClick="registerGain()">Registrar</button>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h1 class="title is-4">
-        Histórico
-      </h1>
-      <table class="table is-striped is-fullwidth">
-          <thead>
-              <tr>
-                  <th>Valor</th>
-                  <th>Descrição</th>
-                  <th>Data</th>
-                  <th></th> <!-- Empty header for the buttons column -->
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>R$ 100,00</td>
-                  <td>Compra de material</td>
-                  <td>2024-05-30</td>
-                  <td>
-                      <div class="button-container">
-                          <button class="button is-small is-info">Editar</button>
-                          <button class="button is-small is-danger">Apagar</button>
-                      </div>
-                  </td>
-              </tr>
-              <tr>
-                  <td>R$ 50,00</td>
-                  <td>Refeição</td>
-                  <td>2024-05-29</td>
-                  <td>
-                      <div class="button-container">
-                          <button class="button is-small is-info">Editar</button>
-                          <button class="button is-small is-danger">Apagar</button>
-                      </div>
-                  </td>
-              </tr>
-          </tbody>
-      </table>
-    </section>
-  </template>
-
-  <script type="module" src="scripts/main.js"></script>
+  <script type="module" src="scripts/init.js"></script>
 </body>
 </html>
+

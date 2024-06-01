@@ -1,0 +1,72 @@
+<template id="loggedView">
+  <section class="section">
+    <div class="columns user-info">
+      <div class="column is-narrow">
+        <figure class="image is-128x128">
+          <img id="userImage" src="" alt="User Image">
+        </figure>
+      </div>
+      <div class="column">
+        <h1 class="title is-2" id="userName"></h1>
+      </div>
+      <div class="column is-narrow is-flex">
+        <button class="button is-light" id="logoutButton">Sair</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section is-fullheight is-fullheight-with-navbar">
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-4">Registrar ganhos</h1>
+        <input class="input" type="text" placeholder="Valor" id="gainAmount">
+        <input class="input" type="text" placeholder="Descrição" id="gainDescription">
+        <button class="button" id="gainButton">Registrar</button>
+      </div>
+      <div class="column">
+        <h1 class="title is-4">Registrar gastos</h1>
+        <input class="input" type="text" placeholder="Valor" id="expenseAmount">
+        <input class="input" type="text" placeholder="Descrição" id="expenseDescription">
+        <button class="button" id="expenseButton">Registrar</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h1 class="title is-4">Histórico</h1>
+    <table class="table is-striped is-fullwidth">
+      <thead>
+        <tr>
+          <th>Valor</th>
+          <th>Descrição</th>
+          <th>Data</th>
+          <th></th> <!-- Empty header for the buttons column -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>R$ 100,00</td>
+          <td>Compra de material</td>
+          <td>2024-05-30</td>
+          <td>
+            <div class="button-container">
+              <button class="button is-small is-info">Editar</button>
+              <button class="button is-small is-danger">Apagar</button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>R$ 50,00</td>
+          <td>Refeição</td>
+          <td>2024-05-29</td>
+          <td>
+            <div class="button-container">
+              <button class="button is-small is-info">Editar</button>
+              <button class="button is-small is-danger">Apagar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</template>
