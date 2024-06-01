@@ -5,6 +5,19 @@ let $main = document.getElementById("main");
 init();
 
 function init() {
+  let hash = window.location.hash;
+
+  switch (hash) {
+    case "#login-callback":
+      loginCallback();
+      break;
+    default:
+      loadHomeView();
+      break;
+  }
+}
+
+function loadHomeView() {
   if (isLogged()) {
     loadLoggedView();
   } else {
@@ -12,8 +25,28 @@ function init() {
   }
 }
 
-function login() {
-  window.location.href = `${API_URL}/login`;
+function calculateWindowPos() {
+  let screenWidth = window.screen.width;
+  let screenHeight = window.screen.height;
+  let windowWidth = Math.floor(screenWidth * (2 / 5));
+  let windowHeight = Math.floor(screenHeight * (2 / 3));
+  let leftPosition = (screenWidth - windowWidth) / 2;
+  let topPosition = (screenHeight - windowHeight) / 2;
+
+  return `width=${windowWidth},height=${windowHeight},left=${leftPosition},top=${topPosition}`;
+}
+
+function loginCallback() {
+  window.opener.focus();
+  window.opener.location.reload()
+  window.close()
+}
+
+function openLoginWindow() {
+  let windowPos = calculateWindowPos();
+  let authWindow = window.open(`${API_URL}/login`, "_blank", windowPos);
+
+  authWindow.focus();
 }
 
 function logout() {
@@ -39,7 +72,7 @@ function loadNotLoggedView() {
   $main.innerHTML = $template.innerHTML;
 
   let $loginButton = document.getElementById("loginButton");
-  $loginButton.addEventListener("click", login);
+  $loginButton.addEventListener("click", openLoginWindow);
 }
 
 async function loadLoggedView() {
