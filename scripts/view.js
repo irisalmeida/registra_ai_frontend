@@ -1,5 +1,5 @@
 import { isLogged, openLoginWindow, logout } from "./auth.js";
-import { getUserData, register } from "./api.js";
+import { getUserData, register, getHistory } from "./api.js";
 
 let $main = document.getElementById("main");
 
@@ -37,6 +37,9 @@ export async function loadLoggedView() {
   document.getElementById("userName").textContent = userData["username"];
   document.getElementById("userImage").src = userData["profile_pic"];
 
+  let historyData = await getHistory();
+  loadHistory(historyData);
+
   let $gainAmount = document.getElementById("gainAmount");
   let $expenseAmount = document.getElementById("expenseAmount");
   $gainAmount.addEventListener("input", function(event) {
@@ -51,7 +54,7 @@ export async function loadLoggedView() {
   let $gainDescription = document.getElementById("gainDescription");
   let $expenseDescription = document.getElementById("expenseDescription");
 
-  document.getElementById("gainButton").addEventListener("click", function() {
+  document.getElementById("gainButton").addEventListener("click", async function() {
     let amountStr = $gainAmount.value;
     let description = $gainDescription.value;
     let amount = brlStringToFloat(amountStr);
@@ -64,10 +67,12 @@ export async function loadLoggedView() {
     $gainAmount.value = "R$ 0,00";
     $gainDescription.value = "";
 
-    register("gain", amount, description);
+    let res = await register("gain", amount, description);
+    let record = res.record;
+    appendToHistory(record);
   });
 
-  document.getElementById("expenseButton").addEventListener("click", function() {
+  document.getElementById("expenseButton").addEventListener("click", async function() {
     let amountStr = $expenseAmount.value;
     let description = $expenseDescription.value;
     let amount = brlStringToFloat(amountStr);
@@ -80,7 +85,9 @@ export async function loadLoggedView() {
     $expenseAmount.value = "R$ 0,00";
     $expenseDescription.value = "";
 
-    register("expense", amount, description);
+    let res = await register("expense", amount, description);
+    let record = res["record"];
+    appendToHistory(record);
   });
 }
 
@@ -107,4 +114,35 @@ function formatMoneyInput(event) {
   let formattedMoney = formatMoney(numericValue);
   let amount = `R$ ${formattedMoney}`
   event.target.value = amount;
+}
+
+function appendToHistory(record) {
+  const date = new Date(record.created_at);
+  const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+
+  const newRow = document.createElement('tr');
+
+  newRow.innerHTML = `
+    <td>R$ ${record.amount.toFixed(2).replace('.', ',')}</td>
+    <td>${record.description}</td>
+    <td>${formattedDate}</td>
+    <td>
+      <div class="button-container">
+        <button class="button is-small is-info">Editar</button>
+        <button class="button is-small is-danger">Apagar</button>
+      </div>
+    </td>
+  `;
+
+  newRow.dataset.recordId = record.id;
+  newRow.dataset.userId = record.user_id;
+
+  const tbody = document.querySelector('#history tbody');
+  tbody.insertBefore(newRow, tbody.firstChild);
+}
+
+function loadHistory(historyData) {
+  let history = historyData.history;
+
+  history.forEach((record) => appendToHistory(record));
 }

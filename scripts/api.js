@@ -36,7 +36,10 @@ export async function register(type, amount, description) {
 
   let res = await request("POST", `/${type}`, body);
 
-  console.log(res);
-
   return res
+}
+
+export async function getHistory() {
+  let res = await request("GET", "/history")
+  return res;
 }
